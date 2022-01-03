@@ -1,48 +1,31 @@
 package com.example.batchprocessing.job;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.runner.RunWith;
+import com.example.batchprocessing.config.BatchConfiguration;
+import com.example.batchprocessing.listener.JobCompletionNotificationListener;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.batch.core.*;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.sql.DataSource;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
+@SpringBatchTest
 public class JobTest {
 
+    @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
 
-    @Autowired private JobLauncher jobLauncher;
-    @Autowired private JobRepository jobRepository;
-
     @Autowired private JdbcTemplate jdbcTemplate;
-    @Autowired private DataSource dataSource;
-
-    @Autowired
-    private Job importUserJob;
-
-    @Before
-    public void before(){
-        jdbcTemplate = new JdbcTemplate(dataSource);
-        jobLauncherTestUtils = new JobLauncherTestUtils();
-        this.jobLauncherTestUtils.setJobLauncher(jobLauncher);
-        this.jobLauncherTestUtils.setJobRepository(jobRepository);
-        this.jobLauncherTestUtils.setJob(importUserJob);
-    }
 
     @Test
     public void givenJobWithValidData_whenImportUserJob() throws Exception {
